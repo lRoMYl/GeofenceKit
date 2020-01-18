@@ -5,6 +5,23 @@ import XCTest
 @testable import GeofenceKit
 
 class GeofenceKitTests: XCTestCase {
+    
+    class MockUserLocationProvider: UserLocationProviderOverridable {
+        var delegate: UserLocationProviderDelegate?
+        
+        var location: UserLocation? = UserLocation(
+            latitude: 3.11, longitude: 103.10, wifiSsid: "test-wifi")
+        
+        func startMonitoring() {
+            delegate?.userLocationProvider(self, didReceive: location!)
+        }
+        
+        func stopMonitoring() { }
+        
+        func overrideUserLocation(_ userLocation: UserLocation?) {
+            self.location = userLocation
+        }
+    }
 
     var geofencesInVicinity = [Geofence]()
     var isAccessDenied = false
@@ -20,17 +37,6 @@ class GeofenceKitTests: XCTestCase {
     }
 
     func testDefaultPolicy() {
-        struct MockUserLocationProvider: UserLocationProvider {
-            var delegate: UserLocationProviderDelegate?
-            
-            var location: UserLocation? = UserLocation(
-                latitude: 3.11, longitude: 103.10, wifiSsid: "test-wifi")
-            
-            func startMonitoring() { }
-            
-            func stopMonitoring() { }
-        }
-        
         let policy = DefaultPolicy()
         
         let geofenceCoordinateInRegion = Geofence(
@@ -49,17 +55,6 @@ class GeofenceKitTests: XCTestCase {
     
     func testIsInVicinityCoordinateScenario() {
         let expectation = XCTestExpectation(description: "Wait for geofence result")
-        
-        struct MockUserLocationProvider: UserLocationProvider {
-            var delegate: UserLocationProviderDelegate?
-            
-            var location: UserLocation? = UserLocation(
-                latitude: 3.11, longitude: 103.10, wifiSsid: "test-wifi")
-            
-            func startMonitoring() { }
-            
-            func stopMonitoring() { }
-        }
         
         let geofenceKit = GeofenceKit(
             policy: DefaultPolicy(), userLocationProvider: MockUserLocationProvider())
@@ -90,22 +85,11 @@ class GeofenceKitTests: XCTestCase {
     func testIsInVicinityWifiSsidScenarios() {
         let expectation = XCTestExpectation(description: "Wait for geofence result")
         
-        struct MockUserLocationProvider: UserLocationProvider {
-            var delegate: UserLocationProviderDelegate?
-            
-            var location: UserLocation? = UserLocation(
-                latitude: 3.12, longitude: 103.11, wifiSsid: "test-wifi")
-            
-            func startMonitoring() { }
-            
-            func stopMonitoring() { }
-        }
-        
         let geofenceKit = GeofenceKit(
             policy: DefaultPolicy(), userLocationProvider: MockUserLocationProvider())
         let geofenceCoordinateNotInRegion = Geofence(
             identifier: "test-geofence-identifier",
-            latitude: 3.11, longitude: 103.10, radius: 500, wifiSsid: "test")
+            latitude: 3.12, longitude: 103.11, radius: 500, wifiSsid: "test")
         let geofenceWifiSsidMatch = Geofence(
             identifier: "test-geofence-identifier",
             latitude: 3.11, longitude: 103.10, radius: 500, wifiSsid: "test-wifi")
@@ -130,22 +114,11 @@ class GeofenceKitTests: XCTestCase {
     func testIsInVicinityAllScenarios() {
         let expectation = XCTestExpectation(description: "Wait for geofence result")
         
-        struct MockUserLocationProvider: UserLocationProvider {
-            var delegate: UserLocationProviderDelegate?
-            
-            var location: UserLocation? = UserLocation(
-                latitude: 3.12, longitude: 103.11, wifiSsid: "test-wifi")
-            
-            func startMonitoring() { }
-            
-            func stopMonitoring() { }
-        }
-        
         let geofenceKit = GeofenceKit(
             policy: DefaultPolicy(), userLocationProvider: MockUserLocationProvider())
         let geofenceCoordinateInRegion = Geofence(
             identifier: "test-geofence-identifier",
-            latitude: 3.12, longitude: 103.11, radius: 500, wifiSsid: "test")
+            latitude: 3.11, longitude: 103.10, radius: 500, wifiSsid: "test")
         let geofenceWifiSsidMatch = Geofence(
             identifier: "test-geofence-identifier",
             latitude: 3.11, longitude: 103.10, radius: 500, wifiSsid: "test-wifi")
