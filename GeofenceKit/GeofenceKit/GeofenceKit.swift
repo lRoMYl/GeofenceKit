@@ -21,7 +21,7 @@ public final class GeofenceKit {
     private var geofences = [Geofence]()
     private var timer: Timer?
     
-    init(policy: Policy, userLocationProvider: UserLocationProvider) {
+    public init(policy: Policy, userLocationProvider: UserLocationProvider) {
         self.policy = policy
         self.userLocationProvider = userLocationProvider
     }
@@ -29,24 +29,24 @@ public final class GeofenceKit {
 
 // MARK: - Mutation
 extension GeofenceKit {
-    func add(geofence: Geofence) {
+    public func add(geofence: Geofence) {
         geofences.append(geofence)
     }
     
-    func remove(geofence: Geofence) {
+    public func remove(geofence: Geofence) {
         if let idx = geofences.firstIndex(of: geofence) {
             geofences.remove(at: idx)
         }
     }
     
-    func removeAll() {
+    public func removeAll() {
         geofences.removeAll()
     }
 }
 
 // MARK: - Monitoring
 extension GeofenceKit {
-    func startMontoring() {
+    public func startMontoring() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(
             withTimeInterval: policy.interval,
@@ -66,7 +66,7 @@ extension GeofenceKit {
         userLocationProvider.startMonitoring()
     }
     
-    func stopMonitoring() {
+    public func stopMonitoring() {
         timer?.invalidate()
         timer = nil
         
