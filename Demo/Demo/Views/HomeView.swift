@@ -91,17 +91,12 @@ struct HomeView: View {
             }
         }
             .listStyle(GroupedListStyle())
-            .alert(isPresented: $viewModel.showAlertIsDenied) { () -> Alert in
-                Alert(
-                    title: Text("Alert"),
-                    message: Text("Location permission is denied, please goto setting page to enable it"),
-                    dismissButton: .cancel(Text("Ok")))
-            }.alert(isPresented: $viewModel.showAlertIsRestricted) { () -> Alert in
-                Alert(
-                    title: Text("Alert"),
-                    message: Text("Your device location access is restricted, unable to override usr location"),
-                    dismissButton: .cancel(Text("Ok")))
-            }
+        .alert(isPresented: $viewModel.showAlert) { () -> Alert in
+            Alert(
+                title: Text(viewModel.alertType.title),
+                message: Text(viewModel.alertType.text),
+                dismissButton: .cancel(Text("Ok")))
+        }
     }
 }
 

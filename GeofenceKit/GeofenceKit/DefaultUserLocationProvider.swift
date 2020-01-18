@@ -87,14 +87,16 @@ extension DefaultUserLocationProvider: CLLocationManagerDelegate {
     }
     
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        // Attempt to start update location by infering location monitoring
+        // has started by checking timer != nil
+        guard timer != nil else { return }
+        
         if status.isAccessRestricted {
             delegate?.userLocationProviderAccessRestricted(self)
         } else if status.isAccessDenied {
             delegate?.userLocationProviderAccessDenied(self)
         } else {
-            // Attempt to start update location by infering location monitoring
-            // has started by checking timer != nil
-            timer != nil ? locationManager.startUpdatingLocation() : nil
+             locationManager.startUpdatingLocation()
         }
     }
 }

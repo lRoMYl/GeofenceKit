@@ -6,8 +6,23 @@ import Combine
 import GeofenceKit
 import CoreLocation
 
-protocol HomeViewModelType {
+enum HomeViewAlertType {
+    case restricted
+    case denied
     
+    var title: String {
+        return "Alert"
+    }
+    
+    var text: String {
+        switch self {
+        case .denied: return "Location permission is denied, please goto setting page to enable it"
+        case .restricted: return "Your device location access is restricted, unable to override usr location"
+        }
+    }
+}
+
+protocol HomeViewModelType {
     // Inputs
     var wifiSsid: String { get set }
     var latitude: Double { get set }
@@ -19,8 +34,8 @@ protocol HomeViewModelType {
     var userLongitude: Double { get set }
     var userLocationOverride: Bool { get set }
     
-    var showAlertIsDenied: Bool { get set }
-    var showAlertIsRestricted: Bool { get set }
+    var showAlert: Bool { get set }
+    var alertType: HomeViewAlertType { get set }
     
     // Outputs
     var title: String { get }
@@ -88,8 +103,18 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
         }
     }
     
-    var showAlertIsDenied = false { didSet { objectWillChange.send() } }
-    var showAlertIsRestricted = false { didSet { objectWillChange.send() } }
+    var showAlert = false {
+        didSet {
+            // Current alert usage to show show location permission error,
+            // thus always change back userLocationOverride to true as we
+            // couldn't retrieve user location
+            if !showAlert {
+                userLocationOverride = true
+            }
+            objectWillChange.send()
+        }
+    }
+    var alertType: HomeViewAlertType = .denied
     
     // Outputs
     private(set) var title = "" { didSet { objectWillChange.send() } }
@@ -220,19 +245,13 @@ extension HomeViewModel: GeofenceKitDelegate {
     }
     
     func geofenceKitAccessDenied(_ geofenceKit: GeofenceKit) {
-        if !isAccessDenied {
-            showAlertIsDenied = true
-        }
-        
-        isAccessDenied = true
+        showAlert = true
+        alertType = .denied
     }
     
     func geofenceKitAccessRestricted(_ geofenceKit: GeofenceKit) {
-        if !isAccessRestricted {
-            showAlertIsRestricted = true
-        }
-        
-        isAccessRestricted = true
+        showAlert = true
+        alertType = .restricted
     }
 }
 
@@ -245,10 +264,12 @@ extension HomeViewModel: UserLocationProviderDelegate {
     }
     
     func userLocationProviderAccessDenied(_ provider: UserLocationProvider) {
-        showAlertIsDenied = true
+        showAlert = true
+        alertType = .denied
     }
     
     func userLocationProviderAccessRestricted(_ provider: UserLocationProvider) {
-        showAlertIsRestricted = true
+        showAlert = true
+        alertType = .restricted
     }
 }
