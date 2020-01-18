@@ -61,6 +61,11 @@ struct HomeView: View {
                     Toggle(isOn: $viewModel.userLocationOverride) {
                         Text(viewModel.userOverrideTitle)
                     }
+                    HStack() {
+                        Text(viewModel.wifiSsidTitle)
+                        TextField(viewModel.wifiSsidPlaceholder, text: $viewModel.userWifi)
+                        .disabled(!viewModel.userLocationOverride)
+                    }
                     VStack {
                         Text(viewModel.userLatitudeTitle)
                         HStack {

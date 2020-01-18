@@ -30,6 +30,7 @@ protocol HomeViewModelType {
     var radius: Double { get set }
     var monitoring: Bool { get }
     
+    var userWifi: String { get set }
     var userLatitude: Double { get set }
     var userLongitude: Double { get set }
     var userLocationOverride: Bool { get set }
@@ -82,6 +83,12 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
     var radius = 500.0 { didSet { objectWillChange.send() } }
     private(set) var monitoring = false { didSet { objectWillChange.send() } }
     
+    var userWifi = "0000-0000-0000-0000" {
+        didSet {
+            objectWillChange.send()
+            updateUserLocation()
+        }
+    }
     var userLatitude = 0.0 {
         didSet {
             objectWillChange.send()
@@ -234,7 +241,7 @@ extension HomeViewModel {
     
     private func updateUserLocation() {
         let userLocation = UserLocation(
-            latitude: userLatitude, longitude: userLongitude, wifiSsid: "")
+            latitude: userLatitude, longitude: userLongitude, wifiSsid: userWifi)
         geofenceKit.setCustomUserLocation(userLocation)
     }
 }
@@ -255,6 +262,7 @@ extension HomeViewModel: UserLocationProviderDelegate {
         if let latitude = location.latitude, let longtitude = location.longitude {
             userLatitude = latitude
             userLongitude = longtitude
+            userWifi = location.wifiSsid ?? "0000-0000-0000-0000"
         }
     }
     

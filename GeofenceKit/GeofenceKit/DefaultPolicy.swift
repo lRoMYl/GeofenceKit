@@ -8,7 +8,6 @@ public struct DefaultPolicy: Policy {
     
     public func isInVicity(geofence: Geofence, at userLocation: UserLocation) -> Bool {
         if let coordinate = userLocation.coordinate {
-            print("\(geofence.coordinate.latitude), \(geofence.coordinate.longitude) \(coordinate.latitude), \(coordinate.longitude)")
             return geofence.region.contains(coordinate) ||
                 geofence.wifiSsid == userLocation.wifiSsid
         } else {

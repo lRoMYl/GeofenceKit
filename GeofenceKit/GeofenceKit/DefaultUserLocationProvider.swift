@@ -29,7 +29,7 @@ public final class DefaultUserLocationProvider: NSObject, UserLocationProvider {
         } else if CLLocationManager.authorizationStatus().isAccessRestricted {
             delegate?.userLocationProviderAccessRestricted(self)
         } else {
-            locationManager.startUpdatingLocation()
+            startUpdating()
         }
     }
     
@@ -47,6 +47,7 @@ public final class DefaultUserLocationProvider: NSObject, UserLocationProvider {
             self?.lastKnownWifi = self?.getWifiSsid()
             self?.updateUserLocationAndNotifyIfNeeded()
         })
+        timer?.fire()
     }
     
     private func updateUserLocationAndNotifyIfNeeded() {
@@ -96,7 +97,7 @@ extension DefaultUserLocationProvider: CLLocationManagerDelegate {
         } else if status.isAccessDenied {
             delegate?.userLocationProviderAccessDenied(self)
         } else {
-             locationManager.startUpdatingLocation()
+             startUpdating()
         }
     }
 }

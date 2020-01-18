@@ -57,6 +57,7 @@
 		9A6C21FA23D2C4770033FB80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9A6C220D23D2C4AD0033FB80 /* GeofenceKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GeofenceKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A6C222123D2E2140033FB80 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		9A6C222623D315700033FB80 /* Demo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Demo.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +101,7 @@
 		9A6C21E023D2C4740033FB80 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				9A6C222623D315700033FB80 /* Demo.entitlements */,
 				9A6C21E123D2C4740033FB80 /* AppDelegate.swift */,
 				9A6C21E323D2C4740033FB80 /* SceneDelegate.swift */,
 				9A6C221F23D2E1E40033FB80 /* ViewModels */,
@@ -410,6 +412,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Demo/Demo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Demo/Preview Content\"";
 				DEVELOPMENT_TEAM = 8AH82AR7PW;
@@ -430,6 +433,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Demo/Demo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Demo/Preview Content\"";
 				DEVELOPMENT_TEAM = 8AH82AR7PW;
