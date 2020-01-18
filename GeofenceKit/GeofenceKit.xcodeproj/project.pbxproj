@@ -10,6 +10,11 @@
 		9A6C21C523D2C4640033FB80 /* GeofenceKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A6C21BB23D2C4640033FB80 /* GeofenceKit.framework */; };
 		9A6C21CA23D2C4640033FB80 /* GeofenceKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6C21C923D2C4640033FB80 /* GeofenceKitTests.swift */; };
 		9A6C21CC23D2C4640033FB80 /* GeofenceKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A6C21BE23D2C4640033FB80 /* GeofenceKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A6C221023D2C5C90033FB80 /* GeofenceKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6C220F23D2C5C90033FB80 /* GeofenceKit.swift */; };
+		9A6C221223D2C6820033FB80 /* Geofence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6C221123D2C6820033FB80 /* Geofence.swift */; };
+		9A6C221423D2C7990033FB80 /* Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6C221323D2C7990033FB80 /* Policy.swift */; };
+		9A6C221623D2CA6F0033FB80 /* UserLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6C221523D2CA6F0033FB80 /* UserLocation.swift */; };
+		9A6C221823D2CB430033FB80 /* UserLocationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6C221723D2CB430033FB80 /* UserLocationProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +34,11 @@
 		9A6C21C423D2C4640033FB80 /* GeofenceKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeofenceKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A6C21C923D2C4640033FB80 /* GeofenceKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceKitTests.swift; sourceTree = "<group>"; };
 		9A6C21CB23D2C4640033FB80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9A6C220F23D2C5C90033FB80 /* GeofenceKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceKit.swift; sourceTree = "<group>"; };
+		9A6C221123D2C6820033FB80 /* Geofence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geofence.swift; sourceTree = "<group>"; };
+		9A6C221323D2C7990033FB80 /* Policy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Policy.swift; sourceTree = "<group>"; };
+		9A6C221523D2CA6F0033FB80 /* UserLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocation.swift; sourceTree = "<group>"; };
+		9A6C221723D2CB430033FB80 /* UserLocationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocationProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +82,9 @@
 			isa = PBXGroup;
 			children = (
 				9A6C21BE23D2C4640033FB80 /* GeofenceKit.h */,
+				9A6C220F23D2C5C90033FB80 /* GeofenceKit.swift */,
+				9A6C221A23D2CD030033FB80 /* Models */,
+				9A6C221923D2CD030033FB80 /* Protocols */,
 				9A6C21BF23D2C4640033FB80 /* Info.plist */,
 			);
 			path = GeofenceKit;
@@ -84,6 +97,24 @@
 				9A6C21CB23D2C4640033FB80 /* Info.plist */,
 			);
 			path = GeofenceKitTests;
+			sourceTree = "<group>";
+		};
+		9A6C221923D2CD030033FB80 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				9A6C221323D2C7990033FB80 /* Policy.swift */,
+				9A6C221723D2CB430033FB80 /* UserLocationProvider.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		9A6C221A23D2CD030033FB80 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9A6C221123D2C6820033FB80 /* Geofence.swift */,
+				9A6C221523D2CA6F0033FB80 /* UserLocation.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,6 +179,7 @@
 				TargetAttributes = {
 					9A6C21BA23D2C4640033FB80 = {
 						CreatedOnToolsVersion = 11.3;
+						LastSwiftMigration = 1130;
 					};
 					9A6C21C323D2C4640033FB80 = {
 						CreatedOnToolsVersion = 11.3;
@@ -195,6 +227,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A6C221023D2C5C90033FB80 /* GeofenceKit.swift in Sources */,
+				9A6C221623D2CA6F0033FB80 /* UserLocation.swift in Sources */,
+				9A6C221223D2C6820033FB80 /* Geofence.swift in Sources */,
+				9A6C221823D2CB430033FB80 /* UserLocationProvider.swift in Sources */,
+				9A6C221423D2C7990033FB80 /* Policy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +377,7 @@
 		9A6C21D023D2C4640033FB80 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -355,6 +393,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.romy.geofencekit.GeofenceKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -363,6 +402,7 @@
 		9A6C21D123D2C4640033FB80 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -386,6 +426,7 @@
 		9A6C21D323D2C4640033FB80 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = GeofenceKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -403,6 +444,7 @@
 		9A6C21D423D2C4640033FB80 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = GeofenceKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
