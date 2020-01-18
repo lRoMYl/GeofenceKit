@@ -13,7 +13,7 @@ public protocol GeofenceKitDelegate: class {
 
 public final class GeofenceKit {
     public let policy: Policy
-    public let userLocationProvider: UserLocationProvider
+    public private(set) var userLocationProvider: UserLocationProvider
     
     public weak var delegate: GeofenceKitDelegate?
     
@@ -24,6 +24,7 @@ public final class GeofenceKit {
     public init(policy: Policy, userLocationProvider: UserLocationProvider) {
         self.policy = policy
         self.userLocationProvider = userLocationProvider
+        self.userLocationProvider.delegate = self
     }
 }
 

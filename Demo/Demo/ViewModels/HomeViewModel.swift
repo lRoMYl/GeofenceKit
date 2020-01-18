@@ -4,6 +4,7 @@
 import Foundation
 import Combine
 import GeofenceKit
+import CoreLocation
 
 protocol HomeViewModelType {
     
@@ -17,6 +18,9 @@ protocol HomeViewModelType {
     var userLatitude: Double { get set }
     var userLongitude: Double { get set }
     var userLocationOverride: Bool { get set }
+    
+    var showAlertIsDenied: Bool { get set }
+    var showAlertIsRestricted: Bool { get set }
     
     // Outputs
     var title: String { get }
@@ -63,7 +67,17 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
     
     var userLatitude = 0.0 { didSet { objectWillChange.send() } }
     var userLongitude = 0.0 { didSet { objectWillChange.send() } }
-    var userLocationOverride = true { didSet { objectWillChange.send() } }
+    var userLocationOverride = true {
+        didSet {
+            userLocationOverride
+                ? stopMonitoringUserLocation()
+                : startMonitoringUserLocation()
+            objectWillChange.send()
+        }
+    }
+    
+    var showAlertIsDenied = false { didSet { objectWillChange.send() } }
+    var showAlertIsRestricted = false { didSet { objectWillChange.send() } }
     
     // Outputs
     private(set) var title = ""
@@ -116,15 +130,21 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
     let validLongitudeRanges = -180.0...180.0
     let validRadiusRanges = 500.0...50000.0
     
-    var isAccessDenied = false
-    var isAccessRestricted = false
+    var isAccessDenied = CLLocationManager.authorizationStatus().isAccessDenied
+    var isAccessRestricted = CLLocationManager.authorizationStatus().isAccessRestricted
     
     private var geofenceKit: GeofenceKit
+    private var overrideUserLocationProvider: UserLocationProvider
     
-    init(policy: Policy, userLocationProvider: UserLocationProvider) {
+    init(
+        policy: Policy,
+        userLocationProvider: UserLocationProvider,
+        overrideUserLocationProvider: UserLocationProvider) {
         geofenceKit = GeofenceKit(policy: policy, userLocationProvider: userLocationProvider)
+        self.overrideUserLocationProvider = overrideUserLocationProvider
         super.init()
         geofenceKit.delegate = self
+        self.overrideUserLocationProvider.delegate = self
     }
     
     func onTapMonitor() {
@@ -148,7 +168,16 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
     
     private func stopMonitoring() {
         monitoring = false
+        title = ""
         geofenceKit.stopMonitoring()
+    }
+    
+    private func startMonitoringUserLocation() {
+        overrideUserLocationProvider.startMonitoring()
+    }
+    
+    private func stopMonitoringUserLocation() {
+        overrideUserLocationProvider.stopMonitoring()
     }
 }
 
@@ -158,10 +187,33 @@ extension HomeViewModel: GeofenceKitDelegate {
     }
     
     func geofenceKitAccessDenied(_ geofenceKit: GeofenceKit) {
+        if !isAccessDenied {
+            showAlertIsDenied = true
+        }
+        
         isAccessDenied = true
     }
     
     func geofenceKitAccessRestricted(_ geofenceKit: GeofenceKit) {
+        if !isAccessRestricted {
+            showAlertIsRestricted = true
+        }
+        
         isAccessRestricted = true
+    }
+}
+
+extension HomeViewModel: UserLocationProviderDelegate {
+    func userLocationProvider(_ provider: UserLocationProvider, didReceive location: UserLocation) {
+        userLatitude = location.latitude ?? userLatitude
+        userLongitude = location.longitude ?? userLongitude
+    }
+    
+    func userLocationProviderAccessDenied(_ provider: UserLocationProvider) {
+        showAlertIsDenied = true
+    }
+    
+    func userLocationProviderAccessRestricted(_ provider: UserLocationProvider) {
+        showAlertIsRestricted = true
     }
 }

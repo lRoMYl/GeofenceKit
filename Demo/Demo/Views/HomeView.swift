@@ -81,14 +81,32 @@ struct HomeView: View {
                         }
                     }
                 }
+                
+                if viewModel.title.count > 0 {
+                    Text(viewModel.title)
+                }
             }
-        }.listStyle(GroupedListStyle())
+        }
+            .listStyle(GroupedListStyle())
+            .alert(isPresented: $viewModel.showAlertIsDenied) { () -> Alert in
+                Alert(
+                    title: Text("Alert"),
+                    message: Text("Location permission is denied, please goto setting page to enable it"),
+                    dismissButton: .cancel(Text("Ok")))
+            }.alert(isPresented: $viewModel.showAlertIsRestricted) { () -> Alert in
+                Alert(
+                    title: Text("Alert"),
+                    message: Text("Your device location access is restricted, unable to override usr location"),
+                    dismissButton: .cancel(Text("Ok")))
+            }
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView(viewModel: HomeViewModel(
-            policy: DefaultPolicy(), userLocationProvider: DefaultUserLocationProvider()))
+            policy: DefaultPolicy(),
+            userLocationProvider: DefaultUserLocationProvider(),
+            overrideUserLocationProvider: DefaultUserLocationProvider()))
     }
 }

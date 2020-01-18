@@ -92,12 +92,14 @@ extension DefaultUserLocationProvider: CLLocationManagerDelegate {
         } else if status.isAccessDenied {
             delegate?.userLocationProviderAccessDenied(self)
         } else {
-            locationManager.startUpdatingLocation()
+            // Attempt to start update location by infering location monitoring
+            // has started by checking timer != nil
+            timer != nil ? locationManager.startUpdatingLocation() : nil
         }
     }
 }
 
-private extension CLAuthorizationStatus {
+public extension CLAuthorizationStatus {
     var isAccessNotDetermined: Bool {
         switch self {
         case .notDetermined: return true
@@ -107,6 +109,7 @@ private extension CLAuthorizationStatus {
     
     var isAccessDenied: Bool {
         switch self {
+        case .notDetermined: return false
         case .denied: return true
         default: return false
         }
@@ -114,6 +117,7 @@ private extension CLAuthorizationStatus {
     
     var isAccessRestricted: Bool {
         switch self {
+        case .notDetermined: return false
         case .restricted: return true
         default: return false
         }

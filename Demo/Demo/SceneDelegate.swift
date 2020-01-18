@@ -19,7 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let homeView = HomeView(
             viewModel: HomeViewModel(
                 policy: DefaultPolicy(),
-                userLocationProvider: DefaultUserLocationProvider()))
+                userLocationProvider: DefaultUserLocationProvider(),
+                overrideUserLocationProvider: DefaultUserLocationProvider()))
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
