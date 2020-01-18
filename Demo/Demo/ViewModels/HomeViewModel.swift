@@ -244,15 +244,10 @@ extension HomeViewModel: GeofenceKitDelegate {
         title = geofences.count > 0 ? "IN REGION" : "OUTSIDE REGION"
     }
     
-    func geofenceKitAccessDenied(_ geofenceKit: GeofenceKit) {
-        showAlert = true
-        alertType = .denied
-    }
-    
-    func geofenceKitAccessRestricted(_ geofenceKit: GeofenceKit) {
-        showAlert = true
-        alertType = .restricted
-    }
+    // Geokit access permission error from showing alert doesn't have to show
+    // alert atm, as the user experience is quite terrible
+    func geofenceKitAccessDenied(_ geofenceKit: GeofenceKit) { }
+    func geofenceKitAccessRestricted(_ geofenceKit: GeofenceKit) { }
 }
 
 extension HomeViewModel: UserLocationProviderDelegate {
