@@ -4,10 +4,20 @@
 import Foundation
 import CoreLocation
 
+protocol GeofenceKitDelegate: class {
+    func geofenceKit(
+        _ geofenceKit: GeofenceKit, didReceiveUpdate geofences: [Geofence])
+    func geofenceKitAccessDenied(_ geofenceKit: GeofenceKit)
+    func geofenceKitAccessRestricted(_ geofenceKit: GeofenceKit)
+}
+
 class GeofenceKit {
     let policy: Policy
     let userLocationProvider: UserLocationProvider
     
+    weak var delegate: GeofenceKitDelegate?
+    
+    // Internal Props
     private var geofences = [Geofence]()
     private var timer: Timer?
     
@@ -38,7 +48,6 @@ extension GeofenceKit {
 extension GeofenceKit {
     func startMontoring() {
         timer?.invalidate()
-        
         timer = Timer.scheduledTimer(
             withTimeInterval: policy.interval,
             repeats: true, block: { [weak self] _ in
@@ -47,11 +56,14 @@ extension GeofenceKit {
                     let location = sself.userLocationProvider.location
                 else { return }
                 
-                sself.isInVicinity(
+                let results = sself.isInVicinity(
                     geofences: sself.geofences,
                     at: location)
+                sself.delegate?.geofenceKit(sself, didReceiveUpdate: results)
         })
         timer?.fire()
+        
+        userLocationProvider.startMonitoring()
     }
     
     func stopMonitoring() {
@@ -76,5 +88,20 @@ extension GeofenceKit {
         }
         
         return results
+    }
+}
+
+extension GeofenceKit: UserLocationProviderDelegate {
+    // Do nothing for now, doesn't need to be updated that frequently with such
+    // short interval update
+    func userLocationProvider(
+        _ provider: UserLocationProvider, didReceive location: UserLocation) { }
+    
+    func userLocationProviderAccessDenied(_ provider: UserLocationProvider) {
+        delegate?.geofenceKitAccessDenied(self)
+    }
+    
+    func userLocationProviderAccessRestricted(_ provider: UserLocationProvider) {
+        delegate?.geofenceKitAccessRestricted(self)
     }
 }
