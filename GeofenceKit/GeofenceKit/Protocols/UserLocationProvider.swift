@@ -17,3 +17,7 @@ public protocol UserLocationProvider {
     func startMonitoring()
     func stopMonitoring()
 }
+
+public protocol UserLocationProviderOverridable: UserLocationProvider {
+    func overrideUserLocation(_ userLocation: UserLocation?)
+}

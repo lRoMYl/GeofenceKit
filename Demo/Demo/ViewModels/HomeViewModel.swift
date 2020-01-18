@@ -83,7 +83,7 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
     var radius = 500.0 { didSet { objectWillChange.send() } }
     private(set) var monitoring = false { didSet { objectWillChange.send() } }
     
-    var userWifi = "0000-0000-0000-0000" {
+    var userWifi = "" {
         didSet {
             objectWillChange.send()
             updateUserLocation()
@@ -183,7 +183,7 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
     
     init(
         policy: Policy,
-        userLocationProvider: UserLocationProvider,
+        userLocationProvider: UserLocationProviderOverridable,
         overrideUserLocationProvider: UserLocationProvider) {
         geofenceKit = GeofenceKit(policy: policy, userLocationProvider: userLocationProvider)
         self.overrideUserLocationProvider = overrideUserLocationProvider
@@ -242,8 +242,10 @@ extension HomeViewModel {
     
     private func updateUserLocation() {
         let userLocation = UserLocation(
-            latitude: userLatitude, longitude: userLongitude, wifiSsid: userWifi)
-        geofenceKit.setCustomUserLocation(userLocation)
+            latitude: userLatitude,
+            longitude: userLongitude,
+            wifiSsid: !userWifi.isEmpty ? userWifi : nil)
+        geofenceKit.userLocationProvider.overrideUserLocation(userLocation)
     }
 }
 
@@ -263,7 +265,7 @@ extension HomeViewModel: UserLocationProviderDelegate {
         if let latitude = location.latitude, let longtitude = location.longitude {
             userLatitude = latitude
             userLongitude = longtitude
-            userWifi = location.wifiSsid ?? "0000-0000-0000-0000"
+            userWifi = location.wifiSsid ?? ""
         }
     }
     

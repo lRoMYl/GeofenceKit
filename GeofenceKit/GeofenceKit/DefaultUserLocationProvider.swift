@@ -13,6 +13,7 @@ public final class DefaultUserLocationProvider: NSObject, UserLocationProvider {
     private var locationManager = CLLocationManager()
     private var lastKnownLocation: CLLocation?
     private var lastKnownWifi: String?
+    private var overrideUserLocation: UserLocation?
     private var timer: Timer?
     
     public override init() {
@@ -51,7 +52,7 @@ public final class DefaultUserLocationProvider: NSObject, UserLocationProvider {
     }
     
     private func updateUserLocationAndNotifyIfNeeded() {
-        let newLocation = UserLocation(
+        let newLocation = overrideUserLocation ?? UserLocation(
             latitude: lastKnownLocation?.coordinate.latitude,
             longitude: lastKnownLocation?.coordinate.longitude,
             wifiSsid: lastKnownWifi)
@@ -124,5 +125,11 @@ public extension CLAuthorizationStatus {
         case .restricted: return true
         default: return false
         }
+    }
+}
+
+extension DefaultUserLocationProvider: UserLocationProviderOverridable {
+    public func overrideUserLocation(_ userLocation: UserLocation?) {
+        overrideUserLocation = userLocation
     }
 }
