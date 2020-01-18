@@ -101,6 +101,8 @@ struct HomeView: View {
                 title: Text(viewModel.alertType.title),
                 message: Text(viewModel.alertType.text),
                 dismissButton: .cancel(Text("Ok")))
+        }.onTapGesture {
+            UIApplication.shared.endEditing()
         }
     }
 }

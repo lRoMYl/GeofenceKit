@@ -17,6 +17,7 @@
 		9A6C222223D2E2140033FB80 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6C222123D2E2140033FB80 /* HomeViewModel.swift */; };
 		9A6C222323D2FB890033FB80 /* GeofenceKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A6C220D23D2C4AD0033FB80 /* GeofenceKit.framework */; };
 		9A6C222423D2FB890033FB80 /* GeofenceKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9A6C220D23D2C4AD0033FB80 /* GeofenceKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9A6C222923D31A790033FB80 /* UIApplication+EndEditing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6C222823D31A790033FB80 /* UIApplication+EndEditing.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		9A6C220D23D2C4AD0033FB80 /* GeofenceKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GeofenceKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A6C222123D2E2140033FB80 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		9A6C222623D315700033FB80 /* Demo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Demo.entitlements; sourceTree = "<group>"; };
+		9A6C222823D31A790033FB80 /* UIApplication+EndEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+EndEditing.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				9A6C222623D315700033FB80 /* Demo.entitlements */,
 				9A6C21E123D2C4740033FB80 /* AppDelegate.swift */,
 				9A6C21E323D2C4740033FB80 /* SceneDelegate.swift */,
+				9A6C222723D31A660033FB80 /* Extensions */,
 				9A6C221F23D2E1E40033FB80 /* ViewModels */,
 				9A6C222023D2E1E40033FB80 /* Views */,
 				9A6C21E723D2C4770033FB80 /* Assets.xcassets */,
@@ -153,6 +156,14 @@
 				9A6C21E523D2C4740033FB80 /* HomeView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		9A6C222723D31A660033FB80 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9A6C222823D31A790033FB80 /* UIApplication+EndEditing.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -258,6 +269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A6C21E223D2C4740033FB80 /* AppDelegate.swift in Sources */,
+				9A6C222923D31A790033FB80 /* UIApplication+EndEditing.swift in Sources */,
 				9A6C21E423D2C4740033FB80 /* SceneDelegate.swift in Sources */,
 				9A6C21E623D2C4740033FB80 /* HomeView.swift in Sources */,
 				9A6C222223D2E2140033FB80 /* HomeViewModel.swift in Sources */,

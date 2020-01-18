@@ -200,6 +200,7 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
     func onTapCopyUserLocation() {
         latitude = userLatitude
         longitude = userLongitude
+        wifiSsid = userWifi
         updateGeofences()
     }
 }
