@@ -11,6 +11,7 @@ protocol UserLocationProviderDelegate: class {
 }
 
 protocol UserLocationProvider {
+    var delegate: UserLocationProviderDelegate? { get set }
     var location: UserLocation? { get }
     
     func startMonitoring()
