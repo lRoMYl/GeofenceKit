@@ -3,14 +3,14 @@
 
 import Foundation
 
-protocol UserLocationProviderDelegate: class {
+public protocol UserLocationProviderDelegate: class {
     func userLocationProvider(
         _ provider: UserLocationProvider, didReceive location: UserLocation)
     func userLocationProviderAccessDenied(_ provider: UserLocationProvider)
     func userLocationProviderAccessRestricted(_ provider: UserLocationProvider)
 }
 
-protocol UserLocationProvider {
+public protocol UserLocationProvider {
     var delegate: UserLocationProviderDelegate? { get set }
     var location: UserLocation? { get }
     

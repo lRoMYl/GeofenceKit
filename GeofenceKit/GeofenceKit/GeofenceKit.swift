@@ -4,14 +4,14 @@
 import Foundation
 import CoreLocation
 
-protocol GeofenceKitDelegate: class {
+public protocol GeofenceKitDelegate: class {
     func geofenceKit(
         _ geofenceKit: GeofenceKit, didReceiveUpdate geofences: [Geofence])
     func geofenceKitAccessDenied(_ geofenceKit: GeofenceKit)
     func geofenceKitAccessRestricted(_ geofenceKit: GeofenceKit)
 }
 
-class GeofenceKit {
+public final class GeofenceKit {
     let policy: Policy
     let userLocationProvider: UserLocationProvider
     
@@ -94,14 +94,14 @@ extension GeofenceKit {
 extension GeofenceKit: UserLocationProviderDelegate {
     // Do nothing for now, doesn't need to be updated that frequently with such
     // short interval update
-    func userLocationProvider(
+    public func userLocationProvider(
         _ provider: UserLocationProvider, didReceive location: UserLocation) { }
     
-    func userLocationProviderAccessDenied(_ provider: UserLocationProvider) {
+    public func userLocationProviderAccessDenied(_ provider: UserLocationProvider) {
         delegate?.geofenceKitAccessDenied(self)
     }
     
-    func userLocationProviderAccessRestricted(_ provider: UserLocationProvider) {
+    public func userLocationProviderAccessRestricted(_ provider: UserLocationProvider) {
         delegate?.geofenceKitAccessRestricted(self)
     }
 }

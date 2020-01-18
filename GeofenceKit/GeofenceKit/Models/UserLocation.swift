@@ -4,14 +4,14 @@
 import Foundation
 import CoreLocation
 
-struct UserLocation {
-    let latitude: Double?
-    let longitude: Double?
-    let wifiSsid: String?
+public struct UserLocation {
+    public let latitude: Double?
+    public let longitude: Double?
+    public let wifiSsid: String?
     
-    let coordinate: CLLocationCoordinate2D?
+    public let coordinate: CLLocationCoordinate2D?
     
-    init(latitude: Double?, longitude: Double?, wifiSsid: String?) {
+    public init(latitude: Double?, longitude: Double?, wifiSsid: String?) {
         self.latitude = latitude
         self.longitude = longitude
         self.wifiSsid = wifiSsid
@@ -25,7 +25,7 @@ struct UserLocation {
 }
 
 extension UserLocation: Equatable {
-    static func == (lhs: UserLocation, rhs: UserLocation) -> Bool {
+    public static func == (lhs: UserLocation, rhs: UserLocation) -> Bool {
         return lhs.latitude == rhs.latitude &&
             lhs.longitude == rhs.longitude &&
             lhs.wifiSsid == rhs.wifiSsid

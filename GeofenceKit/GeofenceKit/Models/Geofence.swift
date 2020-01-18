@@ -4,17 +4,17 @@
 import Foundation
 import CoreLocation
 
-struct Geofence {
-    let identifier: String
-    let latitude: Double
-    let longitude: Double
-    let radius: Double
-    let wifiSsid: String
+public struct Geofence {
+    public let identifier: String
+    public let latitude: Double
+    public let longitude: Double
+    public let radius: Double
+    public let wifiSsid: String
     
-    let coordinate: CLLocationCoordinate2D
-    let region: CLCircularRegion
+    public let coordinate: CLLocationCoordinate2D
+    public let region: CLCircularRegion
     
-    init(
+    public init(
         identifier: String,
         latitude: Double,
         longitude: Double,
@@ -35,7 +35,7 @@ struct Geofence {
 }
 
 extension Geofence: Equatable {
-    static func ==(lhs: Geofence, rhs: Geofence) -> Bool {
+    public static func ==(lhs: Geofence, rhs: Geofence) -> Bool {
         return lhs.identifier == rhs.identifier
     }
 }

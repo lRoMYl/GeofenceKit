@@ -5,9 +5,9 @@ import Foundation
 import CoreLocation
 import SystemConfiguration.CaptiveNetwork
 
-class DefaultUserLocationProvider: NSObject, UserLocationProvider {
-    weak var delegate: UserLocationProviderDelegate?
-    var location: UserLocation?
+public final class DefaultUserLocationProvider: NSObject, UserLocationProvider {
+    public weak var delegate: UserLocationProviderDelegate?
+    public var location: UserLocation?
     
     // Internal props
     private var locationManager = CLLocationManager()
@@ -21,7 +21,7 @@ class DefaultUserLocationProvider: NSObject, UserLocationProvider {
         locationManager.delegate = self
     }
     
-    func startMonitoring() {
+    public func startMonitoring() {
         if CLLocationManager.authorizationStatus().isAccessNotDetermined {
             locationManager.requestWhenInUseAuthorization()
         } else if CLLocationManager.authorizationStatus().isAccessDenied {
@@ -33,7 +33,7 @@ class DefaultUserLocationProvider: NSObject, UserLocationProvider {
         }
     }
     
-    func stopMonitoring() {
+    public func stopMonitoring() {
         locationManager.stopUpdatingLocation()
         timer?.invalidate()
         timer = nil
@@ -79,14 +79,14 @@ extension DefaultUserLocationProvider {
 }
 
 extension DefaultUserLocationProvider: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             lastKnownLocation = location
             updateUserLocationAndNotifyIfNeeded()
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status.isAccessRestricted {
             delegate?.userLocationProviderAccessRestricted(self)
         } else if status.isAccessDenied {

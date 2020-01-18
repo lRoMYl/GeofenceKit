@@ -4,7 +4,7 @@
 import Foundation
 import CoreLocation
 
-protocol Policy {
+public protocol Policy {
     var interval: TimeInterval { get } 
     
     func isInVicity(

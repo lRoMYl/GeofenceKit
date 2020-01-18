@@ -3,10 +3,10 @@
 
 import Foundation
 
-struct DefaultPolicy: Policy {
-    let interval: TimeInterval = 1.0
+public struct DefaultPolicy: Policy {
+    public let interval: TimeInterval = 1.0
     
-    func isInVicity(geofence: Geofence, at userLocation: UserLocation) -> Bool {
+    public func isInVicity(geofence: Geofence, at userLocation: UserLocation) -> Bool {
         if let coordinate = userLocation.coordinate {
             return geofence.region.contains(coordinate) ||
                 geofence.wifiSsid == userLocation.wifiSsid
