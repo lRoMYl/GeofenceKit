@@ -3,9 +3,11 @@
 
 import SwiftUI
 import GeofenceKit
+import Combine
 
 struct HomeView: View {
     @ObservedObject var viewModel: HomeViewModel
+    @State var currentHeight: CGFloat = 0
     
     var body: some View {
         List {
@@ -96,13 +98,40 @@ struct HomeView: View {
             }
         }
             .listStyle(GroupedListStyle())
-        .alert(isPresented: $viewModel.showAlert) { () -> Alert in
-            Alert(
-                title: Text(viewModel.alertType.title),
-                message: Text(viewModel.alertType.text),
-                dismissButton: .cancel(Text("Ok")))
-        }.onTapGesture {
-            UIApplication.shared.endEditing()
+            .alert(isPresented: $viewModel.showAlert) { () -> Alert in
+                Alert(
+                    title: Text(viewModel.alertType.title),
+                    message: Text(viewModel.alertType.text),
+                    dismissButton: .cancel(Text("Ok")))
+            }
+            .padding(.bottom, currentHeight).animation(.easeOut(duration: 0.25))
+            .edgesIgnoringSafeArea(currentHeight == 0 ? Edge.Set() : .bottom)
+            .onAppear(perform: subscribeToKeyboardChanges)
+    }
+    
+    /*
+     Snippet for Keyboard handling
+     https://forums.developer.apple.com/thread/120763
+     */
+    //MARK: - Keyboard Height
+    private let keyboardHeightOnOpening = NotificationCenter.default
+        .publisher(for: UIResponder.keyboardWillShowNotification)
+        .map { $0.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect }
+        .map { $0.height > 333 ? $0.height : 333 }
+    
+    private let keyboardHeightOnHiding = NotificationCenter.default
+        .publisher(for: UIResponder.keyboardWillHideNotification)
+        .map {_ in return CGFloat(0) }
+    
+    //MARK: - Subscriber to Keyboard's changes
+    private func subscribeToKeyboardChanges() {
+        _ = Publishers.Merge(keyboardHeightOnOpening, keyboardHeightOnHiding)
+            .subscribe(on: RunLoop.main)
+            .sink { height in
+                print("Height: \(height)")
+                if self.currentHeight == 0 || height == 0 {
+                    self.currentHeight = height
+                }
         }
     }
 }
