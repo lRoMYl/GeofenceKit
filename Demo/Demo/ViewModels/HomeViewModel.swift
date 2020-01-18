@@ -32,6 +32,7 @@ protocol HomeViewModelType {
     var longitudeTitle: String { get }
     var radiusTitle: String { get }
     var monitorButtonTitle: String { get }
+    var copyUserLocationButtonTitle: String { get }
     
     var sectionUserHeader: String { get }
     var userOverrideTitle: String { get }
@@ -53,6 +54,7 @@ protocol HomeViewModelType {
     var isAccessRestricted: Bool { get }
     
     func onTapMonitor()
+    func onTapCopyUserLocation()
 }
 
 class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
@@ -65,8 +67,18 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
     var radius = 500.0 { didSet { objectWillChange.send() } }
     private(set) var monitoring = false { didSet { objectWillChange.send() } }
     
-    var userLatitude = 0.0 { didSet { objectWillChange.send() } }
-    var userLongitude = 0.0 { didSet { objectWillChange.send() } }
+    var userLatitude = 0.0 {
+        didSet {
+            objectWillChange.send()
+            updateUserLocation()
+        }
+    }
+    var userLongitude = 0.0 {
+        didSet {
+            objectWillChange.send()
+            updateUserLocation()
+        }
+    }
     var userLocationOverride = true {
         didSet {
             userLocationOverride
@@ -80,7 +92,7 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
     var showAlertIsRestricted = false { didSet { objectWillChange.send() } }
     
     // Outputs
-    private(set) var title = ""
+    private(set) var title = "" { didSet { objectWillChange.send() } }
     
     let sectionGeofenceHeader = "Geofence Config"
     let wifiSsidTitle = "WiFi SSID"
@@ -97,6 +109,7 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
     var monitorButtonTitle: String {
         return monitoring ? "Stop Monitoring" : "Monitor"
     }
+    let copyUserLocationButtonTitle = "Copy User Location"
     
     let sectionUserHeader = "User Location"
     var userOverrideTitle = "Override User Location"
@@ -120,10 +133,10 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
        String(format: "%.1f", self.validLongitudeRanges.upperBound)
     }()
     lazy private(set) var minRadiusText = {
-       String(Int(self.validLatitudeRanges.lowerBound))
+       String(Int(self.validRadiusRanges.lowerBound))
     }()
     lazy private(set) var maxRadiusText = {
-        String(Int(self.validLatitudeRanges.upperBound))
+        String(Int(self.validRadiusRanges.upperBound))
     }()
     
     let validLatitudeRanges = -90.0...90.0
@@ -145,16 +158,24 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
         super.init()
         geofenceKit.delegate = self
         self.overrideUserLocationProvider.delegate = self
+        updateUserLocation()
     }
     
     func onTapMonitor() {
         monitoring ? stopMonitoring() : startMonitoring()
     }
     
-    private func startMonitoring() {
-        monitoring = true
+    func onTapCopyUserLocation() {
+        latitude = userLatitude
+        longitude = userLongitude
+        updateGeofences()
+    }
+}
+
+// MARK: - Internal Actions
+extension HomeViewModel {
+    private func updateGeofences() {
         geofenceKit.removeAll()
-        
         let geofence = Geofence(
             identifier: UUID().uuidString,
             latitude: latitude,
@@ -162,6 +183,12 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
             radius: radius,
             wifiSsid: wifiSsid)
         geofenceKit.add(geofence: geofence)
+    }
+    
+    private func startMonitoring() {
+        monitoring = true
+        
+        updateGeofences()
         
         geofenceKit.startMontoring()
     }
@@ -178,6 +205,12 @@ class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
     
     private func stopMonitoringUserLocation() {
         overrideUserLocationProvider.stopMonitoring()
+    }
+    
+    private func updateUserLocation() {
+        let userLocation = UserLocation(
+            latitude: userLatitude, longitude: userLongitude, wifiSsid: "")
+        geofenceKit.setCustomUserLocation(userLocation)
     }
 }
 
@@ -205,8 +238,10 @@ extension HomeViewModel: GeofenceKitDelegate {
 
 extension HomeViewModel: UserLocationProviderDelegate {
     func userLocationProvider(_ provider: UserLocationProvider, didReceive location: UserLocation) {
-        userLatitude = location.latitude ?? userLatitude
-        userLongitude = location.longitude ?? userLongitude
+        if let latitude = location.latitude, let longtitude = location.longitude {
+            userLatitude = latitude
+            userLongitude = longtitude
+        }
     }
     
     func userLocationProviderAccessDenied(_ provider: UserLocationProvider) {

@@ -14,6 +14,11 @@ public protocol GeofenceKitDelegate: class {
 public final class GeofenceKit {
     public let policy: Policy
     public private(set) var userLocationProvider: UserLocationProvider
+    private var customUserLocation: UserLocation?
+    
+    public var userLocation: UserLocation? {
+        return customUserLocation ?? userLocationProvider.location
+    }
     
     public weak var delegate: GeofenceKitDelegate?
     
@@ -43,6 +48,10 @@ extension GeofenceKit {
     public func removeAll() {
         geofences.removeAll()
     }
+    
+    public func setCustomUserLocation(_ userLocation: UserLocation) {
+        customUserLocation = userLocation
+    }
 }
 
 // MARK: - Monitoring
@@ -54,7 +63,7 @@ extension GeofenceKit {
             repeats: true, block: { [weak self] _ in
                 guard
                     let sself = self,
-                    let location = sself.userLocationProvider.location
+                    let location = sself.userLocation
                 else { return }
                 
                 let results = sself.isInVicinity(

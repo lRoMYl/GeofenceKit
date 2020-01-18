@@ -51,6 +51,9 @@ struct HomeView: View {
                 Button(viewModel.monitorButtonTitle) {
                     self.viewModel.onTapMonitor()
                 }
+                Button(viewModel.copyUserLocationButtonTitle) {
+                    self.viewModel.onTapCopyUserLocation()
+                }
             }
             
             Section(header: Text(viewModel.sectionUserHeader)) {

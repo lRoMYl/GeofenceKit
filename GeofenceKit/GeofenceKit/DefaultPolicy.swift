@@ -4,7 +4,7 @@
 import Foundation
 
 public struct DefaultPolicy: Policy {
-    public let interval: TimeInterval = 1.0
+    public let interval: TimeInterval = 1
     
     public func isInVicity(geofence: Geofence, at userLocation: UserLocation) -> Bool {
         if let coordinate = userLocation.coordinate {
