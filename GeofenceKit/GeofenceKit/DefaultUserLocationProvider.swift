@@ -15,7 +15,7 @@ public final class DefaultUserLocationProvider: NSObject, UserLocationProvider {
     private var lastKnownWifi: String?
     private var timer: Timer?
     
-    override init() {
+    public override init() {
         super.init()
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         locationManager.delegate = self

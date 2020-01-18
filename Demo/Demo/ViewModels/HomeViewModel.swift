@@ -6,8 +6,8 @@ import Combine
 import GeofenceKit
 
 protocol HomeViewModelType {
-    var title: String { get }
     
+    // Inputs
     var wifiSsid: String { get set }
     var latitude: Double { get set }
     var longitude: Double { get set }
@@ -16,38 +16,152 @@ protocol HomeViewModelType {
     
     var userLatitude: Double { get set }
     var userLongitude: Double { get set }
-    var overrideUserLocation: Bool { get set }
+    var userLocationOverride: Bool { get set }
+    
+    // Outputs
+    var title: String { get }
+    
+    var sectionGeofenceHeader: String { get }
+    var wifiSsidTitle: String { get }
+    var wifiSsidPlaceholder: String { get }
+    var latitudeTitle: String { get }
+    var longitudeTitle: String { get }
+    var radiusTitle: String { get }
+    var monitorButtonTitle: String { get }
+    
+    var sectionUserHeader: String { get }
+    var userOverrideTitle: String { get }
+    var userLatitudeTitle: String { get }
+    var userLongitudeTitle: String { get }
+    
+    var minLatitudeText: String { get }
+    var maxLatitudeText: String { get }
+    var minLongitudeText: String { get }
+    var maxLongitudeText: String { get }
+    var minRadiusText: String { get }
+    var maxRadiusText: String { get }
     
     var validLatitudeRanges: ClosedRange<Double> { get }
     var validLongitudeRanges: ClosedRange<Double> { get }
     var validRadiusRanges: ClosedRange<Double> { get }
     
-    func startMonitoring()
-    func stopMonitoring()
+    var isAccessDenied: Bool { get }
+    var isAccessRestricted: Bool { get }
+    
+    func onTapMonitor()
 }
 
 class HomeViewModel: NSObject, ObservableObject, HomeViewModelType {
+    let objectWillChange = ObservableObjectPublisher()
+    
+    // Inputs
+    var wifiSsid = "0000-0000-0000-0000"
+    var latitude = 0.0 { didSet { objectWillChange.send() } }
+    var longitude = 0.0 { didSet { objectWillChange.send() } }
+    var radius = 500.0 { didSet { objectWillChange.send() } }
+    private(set) var monitoring = false { didSet { objectWillChange.send() } }
+    
+    var userLatitude = 0.0 { didSet { objectWillChange.send() } }
+    var userLongitude = 0.0 { didSet { objectWillChange.send() } }
+    var userLocationOverride = true { didSet { objectWillChange.send() } }
+    
+    // Outputs
     private(set) var title = ""
     
-    var wifiSsid = "ssid"
-    var latitude = 0.0
-    var longitude = 0.0
-    var radius = 0.0
-    private(set) var monitoring = false
+    let sectionGeofenceHeader = "Geofence Config"
+    let wifiSsidTitle = "WiFi SSID"
+    let wifiSsidPlaceholder = ""
+    var latitudeTitle: String {
+        return "Latitude: \(String(format: "%.6f", latitude))"
+    }
+    var longitudeTitle: String {
+        return "Longitude: \(String(format: "%.6f", longitude))"
+    }
+    var radiusTitle: String {
+        return "Radius: \(String(format: "%.3f", radius/1000))km"
+    }
+    var monitorButtonTitle: String {
+        return monitoring ? "Stop Monitoring" : "Monitor"
+    }
     
-    var userLatitude = 0.0
-    var userLongitude = 0.0
-    var overrideUserLocation = false
+    let sectionUserHeader = "User Location"
+    var userOverrideTitle = "Override User Location"
+    var userLatitudeTitle: String {
+        return "Latitude: \(String(format: "%.6f", userLatitude))"
+    }
+    var userLongitudeTitle: String {
+        return "Longitude: \(String(format: "%.6f", userLongitude))"
+    }
+    
+    lazy private(set) var minLatitudeText = {
+        String(format: "%.1f", self.validLatitudeRanges.lowerBound)
+    }()
+    lazy private(set) var maxLatitudeText = {
+       String(format: "%.1f", self.validLatitudeRanges.upperBound)
+    }()
+    lazy private(set) var minLongitudeText = {
+       String(format: "%.1f", self.validLongitudeRanges.lowerBound)
+    }()
+    lazy private(set) var maxLongitudeText = {
+       String(format: "%.1f", self.validLongitudeRanges.upperBound)
+    }()
+    lazy private(set) var minRadiusText = {
+       String(Int(self.validLatitudeRanges.lowerBound))
+    }()
+    lazy private(set) var maxRadiusText = {
+        String(Int(self.validLatitudeRanges.upperBound))
+    }()
     
     let validLatitudeRanges = -90.0...90.0
     let validLongitudeRanges = -180.0...180.0
     let validRadiusRanges = 500.0...50000.0
     
-    func startMonitoring() {
-        
+    var isAccessDenied = false
+    var isAccessRestricted = false
+    
+    private var geofenceKit: GeofenceKit
+    
+    init(policy: Policy, userLocationProvider: UserLocationProvider) {
+        geofenceKit = GeofenceKit(policy: policy, userLocationProvider: userLocationProvider)
+        super.init()
+        geofenceKit.delegate = self
     }
     
-    func stopMonitoring() {
+    func onTapMonitor() {
+        monitoring ? stopMonitoring() : startMonitoring()
+    }
+    
+    private func startMonitoring() {
+        monitoring = true
+        geofenceKit.removeAll()
         
+        let geofence = Geofence(
+            identifier: UUID().uuidString,
+            latitude: latitude,
+            longitude: longitude,
+            radius: radius,
+            wifiSsid: wifiSsid)
+        geofenceKit.add(geofence: geofence)
+        
+        geofenceKit.startMontoring()
+    }
+    
+    private func stopMonitoring() {
+        monitoring = false
+        geofenceKit.stopMonitoring()
+    }
+}
+
+extension HomeViewModel: GeofenceKitDelegate {
+    func geofenceKit(_ geofenceKit: GeofenceKit, didReceiveUpdate geofences: [Geofence]) {
+        title = geofences.count > 0 ? "IN REGION" : "OUTSIDE REGION"
+    }
+    
+    func geofenceKitAccessDenied(_ geofenceKit: GeofenceKit) {
+        isAccessDenied = true
+    }
+    
+    func geofenceKitAccessRestricted(_ geofenceKit: GeofenceKit) {
+        isAccessRestricted = true
     }
 }

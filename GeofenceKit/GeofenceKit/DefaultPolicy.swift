@@ -14,4 +14,6 @@ public struct DefaultPolicy: Policy {
             return geofence.wifiSsid == userLocation.wifiSsid
         }
     }
+    
+    public init() {}
 }

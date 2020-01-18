@@ -12,10 +12,10 @@ public protocol GeofenceKitDelegate: class {
 }
 
 public final class GeofenceKit {
-    let policy: Policy
-    let userLocationProvider: UserLocationProvider
+    public let policy: Policy
+    public let userLocationProvider: UserLocationProvider
     
-    weak var delegate: GeofenceKitDelegate?
+    public weak var delegate: GeofenceKitDelegate?
     
     // Internal Props
     private var geofences = [Geofence]()
