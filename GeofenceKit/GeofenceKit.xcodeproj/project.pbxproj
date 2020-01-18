@@ -15,6 +15,7 @@
 		9A6C221423D2C7990033FB80 /* Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6C221323D2C7990033FB80 /* Policy.swift */; };
 		9A6C221623D2CA6F0033FB80 /* UserLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6C221523D2CA6F0033FB80 /* UserLocation.swift */; };
 		9A6C221823D2CB430033FB80 /* UserLocationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6C221723D2CB430033FB80 /* UserLocationProvider.swift */; };
+		9A6C221C23D2D4E80033FB80 /* DefaultUserLocationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6C221B23D2D4E80033FB80 /* DefaultUserLocationProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +40,7 @@
 		9A6C221323D2C7990033FB80 /* Policy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Policy.swift; sourceTree = "<group>"; };
 		9A6C221523D2CA6F0033FB80 /* UserLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocation.swift; sourceTree = "<group>"; };
 		9A6C221723D2CB430033FB80 /* UserLocationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocationProvider.swift; sourceTree = "<group>"; };
+		9A6C221B23D2D4E80033FB80 /* DefaultUserLocationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultUserLocationProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 			children = (
 				9A6C21BE23D2C4640033FB80 /* GeofenceKit.h */,
 				9A6C220F23D2C5C90033FB80 /* GeofenceKit.swift */,
+				9A6C221B23D2D4E80033FB80 /* DefaultUserLocationProvider.swift */,
 				9A6C221A23D2CD030033FB80 /* Models */,
 				9A6C221923D2CD030033FB80 /* Protocols */,
 				9A6C21BF23D2C4640033FB80 /* Info.plist */,
@@ -227,6 +230,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A6C221C23D2D4E80033FB80 /* DefaultUserLocationProvider.swift in Sources */,
 				9A6C221023D2C5C90033FB80 /* GeofenceKit.swift in Sources */,
 				9A6C221623D2CA6F0033FB80 /* UserLocation.swift in Sources */,
 				9A6C221223D2C6820033FB80 /* Geofence.swift in Sources */,

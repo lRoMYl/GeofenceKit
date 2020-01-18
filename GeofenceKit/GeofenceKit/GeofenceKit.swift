@@ -42,11 +42,14 @@ extension GeofenceKit {
         timer = Timer.scheduledTimer(
             withTimeInterval: policy.interval,
             repeats: true, block: { [weak self] _ in
-                guard let sself = self else { return }
+                guard
+                    let sself = self,
+                    let location = sself.userLocationProvider.location
+                else { return }
                 
                 sself.isInVicinity(
                     geofences: sself.geofences,
-                    at: sself.userLocationProvider.location)
+                    at: location)
         })
         timer?.fire()
     }

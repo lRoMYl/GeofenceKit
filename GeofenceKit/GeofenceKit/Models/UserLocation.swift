@@ -4,7 +4,7 @@
 import Foundation
 import CoreLocation
 
-struct UserLocation {
+struct UserLocation: Equatable {
     let latitude: Double?
     let longitude: Double?
     let wifiSsid: String?
