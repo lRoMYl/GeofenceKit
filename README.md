@@ -25,6 +25,7 @@ As there are no external dependencies used for this demo, you do not have to ins
 - WiFi SSID would no longer work very well as of iOS 13, this requires the user to be connected to VPN before the information can be retrieved.
 - The keyboard scrolling is a bit wonky but I don't feel the need to import a 3rd party framework to solve the issue for this demo
 
+## Implementation Details
 ### GeofenceKit Library
 This is a standalone library that comes with the data model and location tracker to determine if the given location is within or outside of the defined geofences.
 
