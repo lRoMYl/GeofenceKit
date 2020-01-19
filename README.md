@@ -126,3 +126,34 @@ HomeViewModel integrates `GeofenceKit` and `UserLocationProvider` and published 
 ViewModel makes it easy to write test cases using scenarios by mocking the interactions without needing the Views itself
 
 Although for the purpose of this demo, I did not integrate any external framework to write proper scenario based test cases
+
+## Potential Improvement
+To provide a plug-n-play mechanism for the implementation using `GeofenceKitImp` protocol to inject the geofencing mechanism.
+
+Then it is possible to swap between implementation of custom geofencing or apple flavoured geofencing without the need to modify extensively on GeofenceKit.
+
+The implementation of timer in GoefenceKit can be also be moved out GeofenceKit, thus making the notification of entering/exit of region even more flexible as the implementation class itself can decide on the frequency of the interval instead of GeofenceKit or Policy. Policy interval could be lossly defined as something more vague such as the accuracy and let the implementation class decide the value of the accuracy through config or hardcoded values.
+
+```
+protocol GeofenceKitImpDelegate: class {
+    func geofenceKitImp(
+        _ geofenceKitImp: GeofenceKitImp, didEnter geofences: [Geofence])
+    func geofenceKitImp(
+        _ geofenceKitImp: GeofenceKitImp, didExit geofences: [Geofence])
+}
+
+protocol GeofenceKitImp {
+    var delegate: GeofenceKitImpDelegate? { get }
+    var userLocation: UserLocation? { get }
+    var geofences: [Geofence] { get }
+    var insideGeofences: [Geofence] { get }
+    var policy: Policy { get }
+    
+    func startMonitoring()
+    func stopMonitoring()
+    
+    func add(geofence: Geofence)
+    func remove(geofence: Geofence)
+    func removeAll()
+}
+```
