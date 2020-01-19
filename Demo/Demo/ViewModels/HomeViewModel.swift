@@ -249,17 +249,19 @@ extension HomeViewModel {
     }
 }
 
+// MARK: - GeofenceKitDelegate
 extension HomeViewModel: GeofenceKitDelegate {
     func geofenceKit(_ geofenceKit: GeofenceKit, didReceiveUpdate geofences: [Geofence]) {
         title = geofences.count > 0 ? "IN REGION" : "OUTSIDE REGION"
     }
     
-    // Geokit access permission error from showing alert doesn't have to show
-    // alert atm, as the user experience is quite terrible
+    // Prevent GeofenceKit access permission error from showing alert atm,
+    // as the user experience is quite terrible
     func geofenceKitAccessDenied(_ geofenceKit: GeofenceKit) { }
     func geofenceKitAccessRestricted(_ geofenceKit: GeofenceKit) { }
 }
 
+// MARK: - UserLocationProviderDelegate
 extension HomeViewModel: UserLocationProviderDelegate {
     func userLocationProvider(_ provider: UserLocationProvider, didReceive location: UserLocation) {
         if let latitude = location.latitude, let longtitude = location.longitude {

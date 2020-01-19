@@ -80,6 +80,7 @@ extension DefaultUserLocationProvider {
     }
 }
 
+// MARK: - CLLocationManagerDelegate
 extension DefaultUserLocationProvider: CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
@@ -103,31 +104,7 @@ extension DefaultUserLocationProvider: CLLocationManagerDelegate {
     }
 }
 
-public extension CLAuthorizationStatus {
-    var isAccessNotDetermined: Bool {
-        switch self {
-        case .notDetermined: return true
-        default: return false
-        }
-    }
-    
-    var isAccessDenied: Bool {
-        switch self {
-        case .notDetermined: return false
-        case .denied: return true
-        default: return false
-        }
-    }
-    
-    var isAccessRestricted: Bool {
-        switch self {
-        case .notDetermined: return false
-        case .restricted: return true
-        default: return false
-        }
-    }
-}
-
+// MARK: - UserLocationProviderOverridable
 extension DefaultUserLocationProvider: UserLocationProviderOverridable {
     public func overrideUserLocation(_ userLocation: UserLocation?) {
         overrideUserLocation = userLocation

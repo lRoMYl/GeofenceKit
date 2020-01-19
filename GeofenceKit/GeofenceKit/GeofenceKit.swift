@@ -92,6 +92,7 @@ extension GeofenceKit {
     }
 }
 
+// MARK: - UserLocationProviderDelegate
 extension GeofenceKit: UserLocationProviderDelegate {
     // Do nothing for now, doesn't need to be updated that frequently with such
     // short interval update
